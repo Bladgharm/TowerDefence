@@ -65,7 +65,7 @@ namespace Assets.Code
                 }
                 else
                 {
-                    _turretHead.localRotation = Quaternion.identity;
+                    _turretHead.localRotation = Quaternion.Lerp(_turretHead.localRotation, Quaternion.identity, 10 * Time.deltaTime);
                 }
             }
         }
