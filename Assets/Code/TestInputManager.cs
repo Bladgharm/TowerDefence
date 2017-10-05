@@ -88,8 +88,8 @@ namespace Assets.Code
             RaycastHit hitInfo;
             if (Physics.Raycast(mouseRay, out hitInfo, 100f, BuildingLayer))
             {
-                var snappedToGrid = GridComponent.SnapToGridCell(hitInfo.point);
-                //var snappedToGrid = GridComponent.SnapToGridCellEdge(hitInfo.point, BuildingVector);
+                //var snappedToGrid = GridComponent.SnapToGridCell(hitInfo.point);
+                var snappedToGrid = GridComponent.SnapToGridCellEdge(hitInfo.point, BuildingVector);
                 _buildItem.transform.position = snappedToGrid;
                 _buildItem.transform.rotation = Quaternion.Euler(rotation);
 
