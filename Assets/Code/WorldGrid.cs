@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 public class WorldGrid : MonoBehaviour
 {
@@ -52,9 +54,9 @@ public class WorldGrid : MonoBehaviour
         }
     }
 
-    public Vector3 SnapToGridCell(Vector3 point)
+    public GridCell GetCellAtPoint(Vector3 point)
     {
-        Vector3 snappedPoint = point;
+        GridCell selectedCell = null;
         for (int i = 0; i < _width; i++)
         {
             for (int j = 0; j < _length; j++)
@@ -62,8 +64,55 @@ public class WorldGrid : MonoBehaviour
                 var cell = _cellsGrid[i, j];
                 if (Vector3.Distance(cell.CellPosition, point) < _cellSize / 2f)
                 {
-                    snappedPoint = cell.CellPosition;
+                    selectedCell = cell;
                 }
+            }
+        }
+        return selectedCell;
+    }
+
+    public Vector3 SnapToGridCell(Vector3 point)
+    {
+        Vector3 snappedPoint = point;
+        var cell = GetCellAtPoint(snappedPoint);
+        if (cell != null)
+        {
+            return cell.CellPosition;
+        }
+        return snappedPoint;
+    }
+
+    public Vector3 SnapToGridCellEdge(Vector3 point, Vector3 directionVector)
+    {
+        Vector3 snappedPoint = point;
+        var cell = GetCellAtPoint(snappedPoint);
+        if (cell != null)
+        {
+            if (Math.Abs(directionVector.x) > 0)
+            {
+                float pointOffset;
+                if (point.x > cell.CellPosition.x)
+                {
+                    pointOffset = cell.CellPosition.x + _cellSize / 2;
+                }
+                else
+                {
+                    pointOffset = cell.CellPosition.x - _cellSize / 2;
+                }
+                snappedPoint = new Vector3(pointOffset, cell.CellPosition.y, cell.CellPosition.z);
+            }
+            if (Math.Abs(directionVector.z) > 0)
+            {
+                float pointOffset;
+                if (point.z > cell.CellPosition.z)
+                {
+                    pointOffset = cell.CellPosition.z + _cellSize / 2;
+                }
+                else
+                {
+                    pointOffset = cell.CellPosition.z - _cellSize / 2;
+                }
+                snappedPoint = new Vector3(cell.CellPosition.x, cell.CellPosition.y, pointOffset);
             }
         }
         return snappedPoint;
