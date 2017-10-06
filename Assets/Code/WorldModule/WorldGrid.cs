@@ -39,6 +39,16 @@ public class WorldGrid : MonoBehaviour
         }
     }
 
+    public bool IsCellFree(Vector3 point)
+    {
+        var cell = GetCellAtPoint(point);
+        if (cell != null)
+        {
+            return cell.CellState == GridCellState.Free;
+        }
+        return false;
+    }
+
     public void FillGridCellAtPoint(Vector3 point)
     {
         for (int i = 0; i < _width; i++)
